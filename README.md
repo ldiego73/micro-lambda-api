@@ -8,7 +8,7 @@ That library has taken reference to some libraries such as:
 - Koa Router (https://github.com/ZijianHe/koa-router/)
 - AWS Lambda Router (https://github.com/art-dc/aws-lambda-router)
 
-## Caracteristicas
+## Features
 
 - Integration with Gateway Lambda Proxy Integrator API using REST API or HTTP API.
 - Integration with ALB Lambda Target Support.
@@ -19,7 +19,7 @@ That library has taken reference to some libraries such as:
 - Creating multiple routers to handle different versions.
 - Typescript support
 
-## Instalación
+## Installation
 
 Installation via `npm`
 
@@ -33,7 +33,7 @@ or `yarn`
 yarn add micro-lambda-api
 ```
 
-## Inicio rápido
+## Getting Started
 
 Using JavaScript
 
