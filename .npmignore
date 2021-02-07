@@ -1,5 +1,10 @@
-lib/
+images/
+src/
 test/
+.editorconfig
 .eslintrc.yml
 .pretierrc
 jest.config.json
+tsconfig.build.json
+tsconfig.json
+yarn.lock
