@@ -12,13 +12,12 @@ export interface RouteParams {
 }
 export declare function getRouteParams(route: string, path: string): RouteParams | undefined;
 export declare class ApiRouter {
+    name: string;
     private options?;
     private _routes;
     private _middlewares;
-    private _middlewareFinally?;
-    constructor(options?: RouterOptions | undefined);
+    constructor(name: string, options?: RouterOptions | undefined);
     use(handler: HandlerFunction): ApiRouter;
-    end(handler: HandlerFunction): ApiRouter;
     get(path: string, handler: HandlerFunction): ApiRouter;
     post(path: string, handler: HandlerFunction): ApiRouter;
     put(path: string, handler: HandlerFunction): ApiRouter;
@@ -26,7 +25,6 @@ export declare class ApiRouter {
     delete(path: string, handler: HandlerFunction): ApiRouter;
     routes(): Route[];
     middlewares(): HandlerFunction[];
-    finally(): HandlerFunction;
     private createRoute;
     private addRoute;
 }

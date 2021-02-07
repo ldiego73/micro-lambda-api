@@ -23,13 +23,17 @@ export declare class ApiResponse {
     static cors: boolean;
     static credentials: boolean;
     private statusCode;
-    private headers;
+    headers: {
+        [key: string]: string | undefined;
+    };
+    private response;
     constructor(request?: Request | undefined);
     status(code: HttpStatus): ApiResponse;
     header(key: string, value: string): ApiResponse;
     private setDefaultCors;
     private getDefaultCors;
     cors(options?: CorsOptions): ApiResponse;
+    getResponse(): Response;
     send(payload?: unknown, isError?: boolean): Response;
     json(body: any): Response;
     html(body: string): Response;

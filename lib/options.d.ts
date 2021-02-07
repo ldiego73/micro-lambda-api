@@ -1,5 +1,4 @@
 export interface RouterOptions {
-    name: string;
     basePath?: string;
     version?: string;
 }

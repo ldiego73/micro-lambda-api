@@ -51,6 +51,7 @@ export declare const HttpMethod: {
     PUT: string;
     PATCH: string;
     DELETE: string;
+    OPTIONS: string;
 };
 export declare const HttpIntegration: {
     ALB: string;
