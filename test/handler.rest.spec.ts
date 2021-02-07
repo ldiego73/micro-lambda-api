@@ -16,7 +16,7 @@ import { deepCopy } from "./utils";
 
 describe("Handler with AWS API Gateway REST API", () => {
   const api = new Api();
-  const router = new ApiRouter("users");
+  const router = new ApiRouter();
 
   beforeAll(() => {
     ApiResponse.cors = true;
@@ -65,7 +65,7 @@ describe("Handler with AWS API Gateway REST API", () => {
 
   it("should be a valid request", () => {
     const _event = deepCopy(event);
-    const request = ApiRequest(_event, context);
+    const request = new ApiRequest(_event, context);
 
     expect(request.id).toBe(context.awsRequestId);
     expect(request.method).toBe(event.requestContext.httpMethod);

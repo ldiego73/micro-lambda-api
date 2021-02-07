@@ -1,7 +1,7 @@
 import { RouterOptions } from "./options";
-import { Request } from "./request";
+import { ApiRequest } from "./request";
 import { ApiResponse } from "./response";
-export declare type HandlerFunction = (request: Request, response: ApiResponse) => void | any | Promise<any>;
+export declare type HandlerFunction = (request: ApiRequest, response: ApiResponse) => void | any | Promise<any>;
 export interface Route {
     path: string;
     method: string;
@@ -12,11 +12,10 @@ export interface RouteParams {
 }
 export declare function getRouteParams(route: string, path: string): RouteParams | undefined;
 export declare class ApiRouter {
-    name: string;
     private options?;
     private _routes;
     private _middlewares;
-    constructor(name: string, options?: RouterOptions | undefined);
+    constructor(options?: RouterOptions | undefined);
     use(handler: HandlerFunction): ApiRouter;
     get(path: string, handler: HandlerFunction): ApiRouter;
     post(path: string, handler: HandlerFunction): ApiRouter;

@@ -16,7 +16,7 @@ import { deepCopy } from "./utils";
 
 describe("Handler with AWS Application Loader Balancer", () => {
   const api = new Api();
-  const router = new ApiRouter("users");
+  const router = new ApiRouter();
 
   beforeAll(() => {
     ApiResponse.cors = true;
@@ -64,7 +64,7 @@ describe("Handler with AWS Application Loader Balancer", () => {
   });
 
   it("should be a valid request", () => {
-    const request = ApiRequest(event, context);
+    const request = new ApiRequest(event, context);
 
     expect(request.id).toBe(context.awsRequestId);
     expect(request.method).toBe(event.httpMethod);

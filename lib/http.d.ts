@@ -53,11 +53,11 @@ export declare const HttpMethod: {
     DELETE: string;
     OPTIONS: string;
 };
-export declare const HttpIntegration: {
-    ALB: string;
-    APIGW_REST_API: string;
-    APIGW_HTTP_API: string;
-};
+export declare enum HttpIntegration {
+    ALB = "elb",
+    APIGW_REST_API = "apigw-rest-api",
+    APIGW_HTTP_API = "apigw-http-api"
+}
 export declare const HttpHeadersCors: {
     ORIGIN: string;
     METHODS: string;

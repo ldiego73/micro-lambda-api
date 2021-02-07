@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
+import { ApiError } from "./errors";
 import {
   HttpStatus,
   HttpIntegration,
@@ -7,7 +8,7 @@ import {
   HttpContentTypes,
 } from "./http";
 import { CorsOptions } from "./options";
-import { Request } from "./request";
+import { ApiRequest } from "./request";
 
 export interface Response {
   isBase64Encoded: boolean;
@@ -37,7 +38,7 @@ export class ApiResponse {
   };
   private response: any;
 
-  constructor(private request?: Request) {
+  constructor(private request?: ApiRequest) {
     this.headers = Object.assign({}, request?.headers);
   }
 
@@ -147,13 +148,21 @@ export class ApiResponse {
     return this.header("content-type", HttpContentTypes.BINARY).send(body);
   }
 
-  error(payload: ResponseError): Response {
-    return this.status(payload.status || HttpStatus.INTERNAL_SERVER_ERROR).send(
+  error(data: ResponseError | string): Response {
+    if (typeof data === "string") {
+      return this.send({
+        code: ApiError.GENERIC_ERROR,
+        message: data,
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+      });
+    }
+
+    return this.send(
       {
-        status: this.statusCode,
-        code: payload.code,
-        message: payload.message,
-        ...(payload.data ?? {}),
+        status: data.status,
+        code: data.code,
+        message: data.message,
+        ...(data.data ?? {}),
       },
       true
     );

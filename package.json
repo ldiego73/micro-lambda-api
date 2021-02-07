@@ -13,16 +13,18 @@
     "AWS Application Load Balancer",
     "REST API",
     "HTTP API",
+    "lambda",
     "api",
     "nodejs",
-    "typescript"
+    "typescript",
+    "micro"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ldiego73/micro-lambda-api.git"
   },
   "bugs": {
-    "url": "https://github.com/jeremydaly/micro-lambda-api/issues"
+    "url": "https://github.com/ldiego73/micro-lambda-api/issues"
   },
   "scripts": {
     "lint": "eslint \"{src,test}/**/*.ts\" -f stylish",

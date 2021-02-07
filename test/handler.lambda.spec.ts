@@ -23,7 +23,7 @@ describe("Handler with AWS API Gateway HTTP API", () => {
   });
 
   it("should response using ApiResponse", () => {
-    const request = ApiRequest(event, context);
+    const request = new ApiRequest(event, context);
     const response = new ApiResponse(request);
     const result = response.send(request.body);
 
@@ -35,14 +35,14 @@ describe("Handler with AWS API Gateway HTTP API", () => {
   });
 
   it("should response using ApiResponse with error", () => {
-    const request = ApiRequest(event, context);
+    const request = new ApiRequest(event, context);
     const response = new ApiResponse(request);
     const responseError: ResponseError = {
       status: HttpStatus.BAD_REQUEST,
       code: ApiError.GENERIC_ERROR,
       message: "Unknown Error",
     };
-    const result = response.error(responseError);
+    const result = response.status(HttpStatus.BAD_REQUEST).error(responseError);
 
     expect(result.body).toBe(JSON.stringify(responseError));
     expect(result.statusCode).toBe(HttpStatus.BAD_REQUEST);
@@ -61,7 +61,7 @@ describe("Handler with AWS API Gateway HTTP API", () => {
       status: true,
     };
 
-    const request = ApiRequest(_event, context);
+    const request = new ApiRequest(_event, context);
     const response = new ApiResponse(request);
     const result = response.json(request.body);
 
@@ -79,7 +79,7 @@ describe("Handler with AWS API Gateway HTTP API", () => {
     _event.headers["content-type"] = HttpContentTypes.FORM;
 
     const html = "<h1>Lambda handler response HTML</h1>";
-    const request = ApiRequest(_event, context);
+    const request = new ApiRequest(_event, context);
     const response = new ApiResponse(request);
     const result = response.html(html);
 
@@ -92,7 +92,7 @@ describe("Handler with AWS API Gateway HTTP API", () => {
 
   it("should response using ApiResponse with file", () => {
     const file = "Lambda handler response File";
-    const request = ApiRequest(event, context);
+    const request = new ApiRequest(event, context);
     const response = new ApiResponse(request);
     const result = response.file(file);
 

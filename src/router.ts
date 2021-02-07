@@ -1,12 +1,12 @@
 import { MiddlewareError } from "./errors";
 import { HttpMethod } from "./http";
 import { RouterOptions } from "./options";
-import { Request } from "./request";
+import { ApiRequest } from "./request";
 import { ApiResponse } from "./response";
-import { getPathKeys, getPathValues } from "./utils";
+import { getPathKeys, getPathValues, normalizePath } from "./utils";
 
 export declare type HandlerFunction = (
-  request: Request,
+  request: ApiRequest,
   response: ApiResponse
 ) => void | any | Promise<any>;
 
@@ -47,7 +47,7 @@ export class ApiRouter {
   private _routes: Route[] = [];
   private _middlewares: HandlerFunction[] = [];
 
-  constructor(public name: string, private options?: RouterOptions) {}
+  constructor(private options?: RouterOptions) {}
 
   use(handler: HandlerFunction): ApiRouter {
     if (typeof handler !== "function") throw new MiddlewareError();
@@ -97,10 +97,10 @@ export class ApiRouter {
   private createRoute(path: string): string {
     let newPath = path;
 
-    if (this.options?.version) newPath = `${this.options.version}/${newPath}`;
-    if (this.options?.basePath) newPath = `${this.options.basePath}/${newPath}`;
+    if (this.options?.version) newPath = `${this.options.version}${newPath}`;
+    if (this.options?.basePath) newPath = `${this.options.basePath}${newPath}`;
 
-    return newPath;
+    return normalizePath(newPath);
   }
 
   private addRoute(

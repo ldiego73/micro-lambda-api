@@ -1,6 +1,6 @@
 import { HttpStatus } from "./http";
 import { CorsOptions } from "./options";
-import { Request } from "./request";
+import { ApiRequest } from "./request";
 export interface Response {
     isBase64Encoded: boolean;
     statusCode: number;
@@ -27,7 +27,7 @@ export declare class ApiResponse {
         [key: string]: string | undefined;
     };
     private response;
-    constructor(request?: Request | undefined);
+    constructor(request?: ApiRequest | undefined);
     status(code: HttpStatus): ApiResponse;
     header(key: string, value: string): ApiResponse;
     private setDefaultCors;
@@ -38,5 +38,5 @@ export declare class ApiResponse {
     json(body: any): Response;
     html(body: string): Response;
     file(body: any): Response;
-    error(payload: ResponseError): Response;
+    error(data: ResponseError | string): Response;
 }

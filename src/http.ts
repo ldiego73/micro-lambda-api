@@ -55,11 +55,11 @@ export const HttpMethod = {
   OPTIONS: "OPTIONS",
 };
 
-export const HttpIntegration = {
-  ALB: "elb",
-  APIGW_REST_API: "apigw-rest-api",
-  APIGW_HTTP_API: "apigw-http-api",
-};
+export enum HttpIntegration {
+  ALB = "elb",
+  APIGW_REST_API = "apigw-rest-api",
+  APIGW_HTTP_API = "apigw-http-api",
+}
 
 export const HttpHeadersCors = {
   ORIGIN: "*",

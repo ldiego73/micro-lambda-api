@@ -1,6 +1,6 @@
 import { ApiError, HttpError, MethodError, RouteError } from "./errors";
 import { HttpStatus } from "./http";
-import { ApiRequest, Request } from "./request";
+import { ApiRequest } from "./request";
 import { ApiResponse, Response, ResponseError } from "./response";
 import { getRouteParams, HandlerFunction, Route, RouteParams } from "./router";
 
@@ -27,7 +27,7 @@ export class Api {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   async listen(event: any, context: any): Promise<Response> {
-    const request = ApiRequest(event, context);
+    const request = new ApiRequest(event, context);
 
     try {
       if (!this.routes.length) {
@@ -68,7 +68,7 @@ export class Api {
   }
 
   private async executeMiddlewares(
-    request: Request,
+    request: ApiRequest,
     response: ApiResponse
   ): Promise<any> {
     for (let i = 0; i < this.middlewares.length; i++) {
@@ -93,30 +93,39 @@ export class Api {
     return undefined;
   }
 
-  private handleErrors(err: any, request: Request): Response {
+  private handleErrors(err: any, request: ApiRequest): Response {
+    let status = HttpStatus.INTERNAL_SERVER_ERROR;
+
     const response = new ApiResponse(request);
     const responseError: ResponseError = {
       code: ApiError.GENERIC_ERROR,
       message: err.message || "",
+      status,
     };
 
     if (err instanceof HttpError) {
       responseError.code = err.code;
 
       if (err instanceof MethodError) {
-        responseError.status = HttpStatus.METHOD_NOT_ALLOWED;
+        status = HttpStatus.METHOD_NOT_ALLOWED;
+
+        responseError.status = status;
         responseError.data = {
           method: err.method,
           path: err.path,
         };
       } else if (err instanceof RouteError) {
-        responseError.status = HttpStatus.NOT_FOUND;
+        status = HttpStatus.NOT_FOUND;
+
+        responseError.status = status;
         responseError.data = {
           path: err.path,
         };
       }
     }
 
-    return response.error(responseError);
+    return response
+      .status(status)
+      .error(responseError);
   }
 }

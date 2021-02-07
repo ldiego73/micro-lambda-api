@@ -16,7 +16,7 @@ import { deepCopy } from "./utils";
 
 describe("Handler with AWS API Gateway HTTP API", () => {
   const api = new Api();
-  const router = new ApiRouter("users");
+  const router = new ApiRouter({ basePath: "/users" });
 
   beforeAll(() => {
     ApiResponse.cors = true;
@@ -26,24 +26,24 @@ describe("Handler with AWS API Gateway HTTP API", () => {
       .use((req) => {
         req.start = performance.now();
       })
-      .get("/users", (req) => {
+      .get("/", (req) => {
         return req.body;
       })
-      .post("/users", (_, res) => {
+      .post("/", (_, res) => {
         res.status(HttpStatus.CREATED);
 
         return { userId: Math.random() };
       })
-      .get("/users/export", (_, res) => {
+      .get("/export", (_, res) => {
         res.html("<h1>Average 100</h1>>");
       })
-      .get("/users/:id", (req, res) => {
+      .get("/:id", (req: ApiRequest, res: ApiResponse) => {
         res.json(req.body);
       })
-      .put("/users/:id", (_, res) => {
+      .put("/:id", (_, res) => {
         res.status(HttpStatus.CREATED).send();
       })
-      .delete("/users/:id", (req, res) => {
+      .delete("/:id", (req, res) => {
         res
           .status(HttpStatus.NO_CONTENT)
           .cors({ exposeHeaders: "", maxAge: 1000 })
@@ -65,7 +65,7 @@ describe("Handler with AWS API Gateway HTTP API", () => {
 
   it("should be a valid request", () => {
     const _event = deepCopy(event);
-    const request = ApiRequest(_event, context);
+    const request = new ApiRequest(_event, context);
 
     expect(request.id).toBe(context.awsRequestId);
     expect(request.method).toBe(event.requestContext.http.method);
