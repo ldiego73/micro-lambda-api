@@ -1,0 +1,5 @@
+lib/
+test/
+.eslintrc.yml
+.pretierrc
+jest.config.json
