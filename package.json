@@ -30,7 +30,8 @@
     "lint": "eslint \"{src,test}/**/*.ts\" -f stylish",
     "build": "tsc --build tsconfig.build.json",
     "test": "jest --passWithNoTests",
-    "posttest": "node jest-sonar"
+    "posttest": "node jest-sonar",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
