@@ -22,7 +22,7 @@ export class Api {
   }
 
   finally(handler: HandlerFunction): void {
-    this.middlewareFinally = handler;
+    if (typeof handler === "function") this.middlewareFinally = handler;
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -124,8 +124,6 @@ export class Api {
       }
     }
 
-    return response
-      .status(status)
-      .error(responseError);
+    return response.status(status).error(responseError);
   }
 }
