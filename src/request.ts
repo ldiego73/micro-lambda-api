@@ -1,5 +1,5 @@
 import qs from "querystring";
-import { HttpIntegration } from "./http";
+import { HttpIntegration, HttpMethod } from "./http";
 import { normalizePath, parseBody } from "./utils";
 export class ApiRequest {
   private _id: string;
@@ -26,9 +26,10 @@ export class ApiRequest {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(event: any, context: any) {
-    const { requestContext, isBase64Encoded } = event;
+    const requestContext = event.requestContext || {};
+    const { isBase64Encoded } = event;
 
-    const rawStage = requestContext?.stage || "";
+    const rawStage = requestContext.stage || "";
     const routeKey = requestContext.resourcePath || requestContext.routeKey;
 
     let path = event.path || event.rawPath || "/";
@@ -48,9 +49,9 @@ export class ApiRequest {
     this._stage = rawStage === "$default" ? "" : rawStage;
     this._method =
       event.httpMethod ||
-      requestContext?.http?.method ||
-      requestContext?.httpMethod ||
-      undefined;
+      requestContext.http?.method ||
+      requestContext.httpMethod ||
+      HttpMethod.GET;
     this._path = path;
     this._query = Object.assign({}, event.queryStringParameters);
 
@@ -82,15 +83,15 @@ export class ApiRequest {
 
     const rawIp =
       this._headers["x-forwarded-for"] ||
-      requestContext?.http?.sourceIp ||
-      requestContext.identity.sourceIp ||
+      requestContext.http?.sourceIp ||
+      requestContext.identity?.sourceIp ||
       "";
 
     this._ip = rawIp.split(",")[0].trim();
     this._userAgent =
       this._headers["user-agent"] ||
-      requestContext?.http?.userAgent ||
-      requestContext?.identity?.userAgent ||
+      requestContext.http?.userAgent ||
+      requestContext.identity?.userAgent ||
       "";
     this._proxyIntegration = requestContext.elb
       ? HttpIntegration.ALB

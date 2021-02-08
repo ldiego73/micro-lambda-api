@@ -102,4 +102,52 @@ describe("Handler with AWS API Gateway HTTP API", () => {
     expect(result.isBase64Encoded).toBe(request.isBase64Encoded);
     expect(result.statusDescription).toBeUndefined();
   });
+
+  it("should response using ApiResponse without request", () => {
+    const response = new ApiResponse();
+    const result = response.cors().send("Heelo World");
+
+    expect(result.body).toBe("Heelo World");
+    expect(result.statusCode).toBe(HttpStatus.OK);
+    expect(result.isBase64Encoded).toBe(false);
+    expect(result.statusDescription).toBeUndefined();
+  });
+
+  it("should response using ApiResponse with cors", () => {
+    const response = new ApiResponse();
+    const result = response
+      .cors({
+        credentials: true,
+        maxAge: 1000,
+        exposeHeaders: "Access-Control-Allow-Credentials",
+      })
+      .send("Heelo World");
+
+    expect(result.body).toBe("Heelo World");
+    expect(result.statusCode).toBe(HttpStatus.OK);
+    expect(result.isBase64Encoded).toBe(false);
+    expect(result.statusDescription).toBeUndefined();
+  });
+
+  it("should response using ApiResponse with return empty", () => {
+    const response = new ApiResponse();
+    const result = response
+      .send();
+
+    expect(typeof result.body).toBe("string");
+    expect(result.statusCode).toBe(HttpStatus.OK);
+    expect(result.isBase64Encoded).toBe(false);
+    expect(result.statusDescription).toBeUndefined();
+  });
+
+  it("should response using ApiResponse with string error", () => {
+    const response = new ApiResponse();
+    const result = response
+      .error("Is an error");
+
+    expect(typeof result.body).toBe("string");
+    expect(result.statusCode).toBe(HttpStatus.OK);
+    expect(result.isBase64Encoded).toBe(false);
+    expect(result.statusDescription).toBeUndefined();
+  });
 });

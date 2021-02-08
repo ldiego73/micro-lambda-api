@@ -43,6 +43,9 @@ describe("Handler with AWS API Gateway HTTP API", () => {
       .put("/:id", (_, res) => {
         res.status(HttpStatus.CREATED).send();
       })
+      .patch("/:id", (_, res) => {
+        res.status(HttpStatus.NO_CONTENT).send();
+      })
       .delete("/:id", (req, res) => {
         res
           .status(HttpStatus.NO_CONTENT)
@@ -136,6 +139,21 @@ describe("Handler with AWS API Gateway HTTP API", () => {
     expect(result.statusDescription).toBeUndefined();
   });
 
+  it("should run the route of PATCH /users/:id", async () => {
+    const _event = deepCopy(event);
+
+    _event.requestContext.http.method = HttpMethod.PATCH;
+    _event.rawPath = "/develop/users/300/////";
+
+    const result = await api.listen(_event, context);
+
+    expect(result).not.toBeUndefined();
+    expect(result).not.toBeNull();
+    expect(result).toBeInstanceOf(Object);
+    expect(result.statusCode).toBe(HttpStatus.NO_CONTENT);
+    expect(result.statusDescription).toBeUndefined();
+  });
+
   it("should run the route of DELETE /users/:id", async () => {
     const _event = deepCopy(event);
 
@@ -163,21 +181,6 @@ describe("Handler with AWS API Gateway HTTP API", () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(Object);
     expect(result.statusCode).toBe(HttpStatus.NOT_FOUND);
-    expect(result.statusDescription).toBeUndefined();
-  });
-
-  it("should be validate that the method not allowed", async () => {
-    const _event = deepCopy(event);
-
-    _event.requestContext.http.method = HttpMethod.PATCH;
-    _event.rawPath = "/develop/users/100/profile";
-
-    const result = await api.listen(_event, context);
-
-    expect(result).not.toBeUndefined();
-    expect(result).not.toBeNull();
-    expect(result).toBeInstanceOf(Object);
-    expect(result.statusCode).toBe(HttpStatus.METHOD_NOT_ALLOWED);
     expect(result.statusDescription).toBeUndefined();
   });
 });

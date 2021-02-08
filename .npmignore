@@ -8,6 +8,7 @@ test/
 .pretierrc
 jest-sonar.js
 jest.config.json
+sonar-project.properties
 tsconfig.build.json
 tsconfig.json
 yarn.lock

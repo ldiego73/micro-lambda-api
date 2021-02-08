@@ -1,4 +1,30 @@
-![Miro Lambda API](images/icon.svg)
+<div align="center">
+  <img alt="Logo" src="images/icon.svg" height="96" />
+</div>
+
+<p align="center">
+  <a href="https://github.com/ldiego73/micro-lambda-api/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"/>
+  </a>
+  <a href="https://github.com/ldiego73/micro-lambda-api/actions" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/github/workflow/status/ldiego73/micro-lambda-api/CI" alt="Micro Lambda API"/>
+  </a>
+  <a href="https://sonarcloud.io/dashboard?id=micro-lambda-api" target="_blank" rel="noopener noreferrer">
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=micro-lambda-api&metric=ncloc" alt="Lines of Code"/>
+  </a>
+  <a href="https://sonarcloud.io/dashboard?id=micro-lambda-api" target="_blank" rel="noopener noreferrer">
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=micro-lambda-api&metric=alert_status" alt="Quality Gate Status"/>
+  </a>
+  <a href="https://coveralls.io/github/ldiego73/micro-lambda-api?branch=main" target="_blank" rel="noopener noreferrer">
+    <img src="https://coveralls.io/repos/github/ldiego73/micro-lambda-api/badge.svg?branch=main" alt="Coverage Status"/>
+  </a>
+  <a href="https://sonarcloud.io/dashboard?id=micro-lambda-api" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/sonar/tests/micro-lambda-api?compact_message&server=https%3A%2F%2Fsonarcloud.io" alt="Tests"/>
+  </a>
+  <a href="https://sonarcloud.io/dashboard?id=micro-lambda-api" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/sonar/test_execution_time/micro-lambda-api?server=https%3A%2F%2Fsonarcloud.io" alt="Tests Execution Time"/>
+  </a>
+</p>
 
 **Micro Lambda API** is a small library for AWS Lambda that provides an easy way to use routing with AWS API Gateway and AWS Application Load Balancer services for API.
 
@@ -7,6 +33,44 @@ That library has taken reference to some libraries such as:
 - Lambda API (https://github.com/jeremydaly/lambda-api)
 - Koa Router (https://github.com/ZijianHe/koa-router/)
 - AWS Lambda Router (https://github.com/art-dc/aws-lambda-router)
+
+## API Reference
+
+- [API Reference](#api-reference)
+- [Features](#features)
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+- [Router](#router)
+  - [Options](#options)
+  - [Methods ⇒ `ApiRouter`](#methods--apirouter)
+  - [Middleware => `ApiRouter`](#middleware--apirouter)
+  - [Router prefixes](#router-prefixes)
+  - [Router responses](#router-responses)
+  - [Functions](#functions)
+    - [`routes()`](#routes)
+    - [`middlewares()`](#middlewares)
+  - [Static](#static)
+    - [`getRouteParams(route, path)`](#getrouteparamsroute-path)
+- [Request](#request)
+  - [Properties](#properties)
+- [Response](#response)
+  - [Options](#options-1)
+  - [Methods](#methods)
+    - [status(code) ⇒ `ApiResponse`](#statuscode--apiresponse)
+    - [header(key, value) ⇒ `ApiResponse`](#headerkey-value--apiresponse)
+    - [cors(options) ⇒ `ApiResponse`](#corsoptions--apiresponse)
+    - [getResponse()](#getresponse)
+    - [send(payload, isError)](#sendpayload-iserror)
+    - [json(body)](#jsonbody)
+    - [html(body)](#htmlbody)
+    - [file(body)](#filebody)
+    - [error(data)](#errordata)
+- [`finally`](#finally)
+- [Contributing](#contributing)
+- [Versioning](#versioning)
+- [Authors](#authors)
+- [License](#license)
+- [Support](#support)
 
 ## Features
 
@@ -95,52 +159,6 @@ export async function handler(event: any, context: any) {
 }
 ```
 
-## API Reference
-
-- [Router](#router)
-  - Methods (get, post, patch, put, delete) ⇒ `ApiRouter`
-  - Middleware => `ApiRouter`
-  - Router prefixes
-  - Router responses
-  - Functions
-    - routes()
-    - middlewares()
-  - Static
-    - getRouteParams(route, path)
-- [Request](#request)
-  - Properties
-    - id
-    - stage
-    - method
-    - path
-    - query
-    - params
-    - headers()
-    - body
-    - host
-    - ip
-    - userAgent
-    - proxyIntegration
-    - isBase64Encoded
-- [Response](#response)
-  - Options
-  - Methods
-    - status(code) ⇒ `ApiResponse`
-    - header(key, value) ⇒ `ApiResponse`
-    - cors(options) ⇒ `ApiResponse`
-    - getResponse()
-    - send(payload, isError)
-    - json(body)
-    - html(body)
-    - file(body)
-    - error(data)
-- [`finally`](#finally)
-- [Contributing](#contributing)
-- [Versioning](#versioning)
-- [Authors](#authors)
-- [License](#license)
-- [Support](#support)
-
 ## Router
 
 Class that defines the different HTTP methods
@@ -162,10 +180,10 @@ app.use(router.routes()).use(router.middlewares());
 
 ### Options
 
-| Parameer              | Type   | Description                               |
-| --------------------- | ------ | ----------------------------------------- |
-| `basePath` (Optional) | String | Prefix of all routes                      |
-| `version` (Optional)  | String | Router version number. Example: v2        |
+| Parameer              | Type   | Description                        |
+| --------------------- | ------ | ---------------------------------- |
+| `basePath` (Optional) | String | Prefix of all routes               |
+| `version` (Optional)  | String | Router version number. Example: v2 |
 
 Examples:
 
@@ -252,7 +270,7 @@ router
   });
 ```
 
-> NOTE: Remember that middlewares run according to the order that were created. 
+> NOTE: Remember that middlewares run according to the order that were created.
 
 ### Router prefixes
 
@@ -336,10 +354,10 @@ router.middlewares();
 
 A method that is not part of the Router class and is used to get the parameters of a URL.
 
-| Parameter | Type   | Description                                   |
-|-----------|--------|-----------------------------------------------|
-| `route`   | String | Route with dynamic parameters                 |
-| `path`    | String | The url that was invoked by the user          |
+| Parameter | Type   | Description                          |
+| --------- | ------ | ------------------------------------ |
+| `route`   | String | Route with dynamic parameters        |
+| `path`    | String | The url that was invoked by the user |
 
 Example:
 
@@ -355,6 +373,7 @@ The request class allows you to parse the event that was invoked through an API 
 So you don't need to use all the functionality of the paths, api, errors, etc., you can use it in your Lambda `handler` function.
 
 Example:
+
 ```js
 exports.handler = (event, context) => {
   const request = new ApiRequest(event);
@@ -362,7 +381,7 @@ exports.handler = (event, context) => {
   console.log(request.query);
   console.log(request.params);
   console.log(request.body);
-}
+};
 ```
 
 > NOTE: Remember that while the Request class is independent it uses some functions that are within `utils` and `http`.
@@ -371,50 +390,50 @@ exports.handler = (event, context) => {
 
 1. `id`
 
-    Transaction ID
-    Example: `dc6128b3-bdcb-464d-a1e1-009b041ff9b9`
+   Transaction ID
+   Example: `dc6128b3-bdcb-464d-a1e1-009b041ff9b9`
 
 2. `stage`
 
-    If you are working with API Gateway Stages, it will contain a value.
-    Example: `develop`.
-    
-    If you set no stage in the Gateway API by default it will be empty.
+   If you are working with API Gateway Stages, it will contain a value.
+   Example: `develop`.
+
+   If you set no stage in the Gateway API by default it will be empty.
 
 3. `method`
 
-    Identifies the HTTP Method. Possible values: `GET`, `PUT`, `POST`, etc.
+   Identifies the HTTP Method. Possible values: `GET`, `PUT`, `POST`, etc.
 
 4. `path`
 
-    Identify the URL. Example: `/users`.
+   Identify the URL. Example: `/users`.
 
 5. `query`
 
-    Returns in an object all parameters that were passed in the URL query.
-    Example: `{id: 100}`
+   Returns in an object all parameters that were passed in the URL query.
+   Example: `{id: 100}`
 
 6. `params`
 
-    By default, return an empty object. If you do not work with the `API` class to be able to assign it a value must use the function: `getRouteParams(route, path)`.
+   By default, return an empty object. If you do not work with the `API` class to be able to assign it a value must use the function: `getRouteParams(route, path)`.
 
 7. `headers()`
 
-    Returns an array of all headers in the request. Header names will be lowercase.
+   Returns an array of all headers in the request. Header names will be lowercase.
 
 8. `body`
 
-    Returns an object with all the parameters returned in the request body. Only works with `content-type` `application/json` or `application/x-www-form-urlencoded`. 
-    
-    > NOTE: Doesn't support binary content. Example: files.
+   Returns an object with all the parameters returned in the request body. Only works with `content-type` `application/json` or `application/x-www-form-urlencoded`.
+
+   > NOTE: Doesn't support binary content. Example: files.
 
 9. `host`
 
-    Returns the host that invoked the request. 
-    
-    If ALB, the DNS will return.
+   Returns the host that invoked the request.
 
-    If API Gateway will return the domain.
+   If ALB, the DNS will return.
+
+   If API Gateway will return the domain.
 
 10. `ip`
 
@@ -427,7 +446,7 @@ exports.handler = (event, context) => {
 12. `proxyIntegration`
 
     Identifies what integration your Lambda has.
-    
+
     The values to return are: `elb` or `apigw-rest-api` or `apigw-http-api`.
 
 13. `isBase64Encoded`
@@ -443,6 +462,7 @@ The response class allows you to configure and return the response that Lambda w
 If you don't need to use all the functionality of your paths, api, errors, etc., you can use it in your Lambda `handler` function.
 
 Example:
+
 ```js
 exports.handler = (event, context) => {
   ...
@@ -463,12 +483,13 @@ exports.handler = (event, context) => {
 Options are only available if you use without Api and Router.
 
 | Option        | Type    | Description                                                        |
-|---------------|---------|--------------------------------------------------------------------|
+| ------------- | ------- | ------------------------------------------------------------------ |
 | `cors`        | boolean | Static value that enable the headers cors in all responses.        |
 | `credentials` | boolean | Static value that enable the headers credentials in all responses. |
 | `request`     | object  | Parameter optional in the initialization the class.                |
 
 Example:
+
 ```js
 exports.handler = (event, context) => {
   const request = new ApiRequest(event, context);
@@ -501,10 +522,11 @@ Status `405` is used when the method does not exist and `404` when the route is 
 For better control you can use the HttpStatus object which has a listing of all http codes that you can return.
 
 Example:
+
 ```js
 router.get("/", (req, res) => {
   res.status(HttpStatus.OK).send(true);
-})
+});
 ```
 
 #### header(key, value) ⇒ `ApiResponse`
@@ -514,6 +536,7 @@ Use the header function if you want to add custom header that They will be retur
 Remember that all keys will be converted to lowercase.
 
 Example:
+
 ```js
 router.get("/", (req, res) => {
   res.header("X-Custom-Header", "my-custom-header");
@@ -527,6 +550,7 @@ router.get("/", (req, res) => {
 Allows you to add custom cors for each request. If you want to work with the cors by default, use the static value cors.
 
 Example:
+
 ```js
 router.get("/", (req, res) => {
   res.cors({
@@ -603,7 +627,7 @@ A metode that defaults to the `conten-type` header in `application/json` And tha
 res.json({
   id: 1,
   name: "admin",
-  status: true
+  status: true,
 });
 ```
 
@@ -655,14 +679,14 @@ Example:
 
 ```js
 router.get("/", () => {
-  throw Error("Unknow error");
+  throw Error("Unknown error");
 });
 
 // Return
 {
   status: 500,
   code: "GENERIC_ERROR",
-  message: "Unknow Error",
+  message: "Unknown Error",
 }
 ```
 
@@ -688,7 +712,7 @@ api.finally((req, res) => {
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us. 
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 

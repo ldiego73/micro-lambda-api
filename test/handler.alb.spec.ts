@@ -26,6 +26,9 @@ describe("Handler with AWS Application Loader Balancer", () => {
       .use((req) => {
         req.start = performance.now();
       })
+      .get("/", (req) => {
+        return req.body;
+      })
       .get("/users", (req) => {
         return req.body;
       })
@@ -77,6 +80,22 @@ describe("Handler with AWS Application Loader Balancer", () => {
     expect(request.stage).toBe("");
     expect(request.proxyIntegration).toBe(HttpIntegration.ALB);
     expect(request.isBase64Encoded).toBe(event.isBase64Encoded);
+  });
+
+  it("should run the route of GET /", async () => {
+    const _event = deepCopy(event);
+
+    _event.path = "";
+
+    const result = await api.listen(_event, context);
+
+    expect(result).not.toBeUndefined();
+    expect(result).not.toBeNull();
+    expect(result).toBeInstanceOf(Object);
+    expect(result.statusCode).toBe(HttpStatus.OK);
+    expect(result.statusDescription).toBe(
+      `${HttpStatus.OK} ${HttpStatus[HttpStatus.OK]}`
+    );
   });
 
   it("should run the route of GET /users", async () => {

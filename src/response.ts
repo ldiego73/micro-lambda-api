@@ -106,8 +106,12 @@ export class ApiResponse {
   }
 
   send(payload?: unknown, isError = false): Response {
-    const responseBody =
-      typeof payload !== "string" ? JSON.stringify(payload) : payload || "";
+    let responseBody = "";
+
+    if (typeof payload !== "undefined") {
+      responseBody =
+        typeof payload !== "string" ? JSON.stringify(payload) : payload;
+    }
 
     if (ApiResponse.cors) {
       const [acao, acam, acah] = this.getDefaultCors();
