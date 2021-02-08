@@ -8,11 +8,28 @@
     "ts",
     "js"
   ],
+  "reporters": [
+    "default",
+    [
+      "jest-html-reporters",
+      {
+        "publicPath": "reports/test",
+        "filename": "result.html",
+        "pageTitle": "Micro Lambda API - Unit Test"
+      }
+    ]
+  ],
   "collectCoverage": true,
+  "collectCoverageFrom": [
+    "src/**/*.ts",
+    "!**/node_modules/**"
+  ],
   "coverageReporters": [
     "json",
     "text",
+    "lcov",
     "html"
   ],
-  "coverageDirectory": "reports"
+  "coverageDirectory": "reports/coverage",
+  "testResultsProcessor": "jest-sonar-reporter"
 }

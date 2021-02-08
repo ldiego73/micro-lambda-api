@@ -1,3 +1,4 @@
+.github/
 images/
 reports/
 src/
@@ -5,6 +6,7 @@ test/
 .editorconfig
 .eslintrc.yml
 .pretierrc
+jest-sonar.js
 jest.config.json
 tsconfig.build.json
 tsconfig.json
