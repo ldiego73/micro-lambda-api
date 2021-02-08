@@ -6,6 +6,9 @@
   <a href="https://github.com/ldiego73/micro-lambda-api/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
     <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"/>
   </a>
+  <a href="https://www.npmjs.com/package/micro-lambda-api" rel="noopener noreferrer">
+    <img src="https://img.shields.io/npm/v/micro-lambda-api.svg" alt="NPM Package" />
+  </a>
   <a href="https://github.com/ldiego73/micro-lambda-api/actions" target="_blank" rel="noopener noreferrer">
     <img src="https://img.shields.io/github/workflow/status/ldiego73/micro-lambda-api/CI" alt="Micro Lambda API"/>
   </a>
@@ -20,9 +23,6 @@
   </a>
   <a href="https://sonarcloud.io/dashboard?id=micro-lambda-api" target="_blank" rel="noopener noreferrer">
     <img src="https://img.shields.io/sonar/tests/micro-lambda-api?compact_message&server=https%3A%2F%2Fsonarcloud.io" alt="Tests"/>
-  </a>
-  <a href="https://sonarcloud.io/dashboard?id=micro-lambda-api" target="_blank" rel="noopener noreferrer">
-    <img src="https://img.shields.io/sonar/test_execution_time/micro-lambda-api?server=https%3A%2F%2Fsonarcloud.io" alt="Tests Execution Time"/>
   </a>
 </p>
 
