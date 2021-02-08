@@ -1,8 +1,8 @@
-import * as rawHttp from "./data/data.http";
-import * as rawRest from "./data/data.rest";
-import * as rawAlb from "./data/data.alb";
-import { ApiRequest, HttpIntegration, HttpMethod } from "../src";
-import { deepCopy } from "./utils";
+import * as rawHttp from "../data/data.http";
+import * as rawRest from "../data/data.rest";
+import * as rawAlb from "../data/data.alb";
+import { ApiRequest, HttpIntegration, HttpMethod } from "../../src";
+import { deepCopy } from "../utils";
 
 describe("Router", () => {
   let request: ApiRequest;

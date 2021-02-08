@@ -1,18 +1,18 @@
 /* eslint-disable security-node/detect-crlf */
 /* eslint-disable no-console */
 
-import { context, event } from "./data/data.rest";
-import { Api } from "../src/api";
+import { context, event } from "../data/data.rest";
 import {
+  Api,
   ApiRequest,
   ApiResponse,
   ApiRouter,
   HttpIntegration,
   HttpMethod,
   HttpStatus,
-} from "../src";
+} from "../../lib";
 import { performance } from "perf_hooks";
-import { deepCopy } from "./utils";
+import { deepCopy } from "../utils";
 
 describe("Handler with AWS API Gateway REST API", () => {
   const api = new Api();

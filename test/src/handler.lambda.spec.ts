@@ -1,4 +1,4 @@
-import { context, event } from "./data/data.http";
+import { context, event } from "../data/data.http";
 import {
   Api,
   ApiError,
@@ -7,8 +7,8 @@ import {
   HttpContentTypes,
   HttpStatus,
   ResponseError,
-} from "../src";
-import { deepCopy } from "./utils";
+} from "../../src";
+import { deepCopy } from "../utils";
 
 describe("Handler with AWS API Gateway HTTP API", () => {
   const api = new Api();

@@ -1,4 +1,4 @@
-import { ApiError, HttpError, HttpMethod, MethodError, MiddlewareError, RouteError } from "../src";
+import { ApiError, HttpError, HttpMethod, MethodError, MiddlewareError, RouteError } from "../../src";
 
 describe("Errors", () => {
   it("should be an HttpError", () => {

@@ -1,5 +1,5 @@
-import { event, context } from "./data/data.rest";
-import { Api, ApiError, ApiRouter, HttpError, HttpStatus } from "../src";
+import { event, context } from "../data/data.rest";
+import { Api, ApiError, ApiRouter, HttpError, HttpStatus } from "../../lib";
 
 describe("Api", () => {
   it("should be a valid Api", () => {

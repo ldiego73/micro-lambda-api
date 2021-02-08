@@ -1,4 +1,4 @@
-import { getPathKeys, getPathValues, normalizePath, parseBody } from "../src";
+import { getPathKeys, getPathValues, normalizePath, parseBody } from "../../src";
 
 describe("Utils", () => {
   it("should be a valid path", () => {

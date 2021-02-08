@@ -28,5 +28,11 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 - The default value of http method is GET
 - Fixed when payload in the response.send() is undefined. Return by default string empty.
 
+## [1.0.3] - 2020-02-08
+
+### Added
+- the `libs` code is minified using `terser`.
+
+[1.0.3]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.0.3
 [1.0.2]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.0.2
 [1.0.1]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.0.1

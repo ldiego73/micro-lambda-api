@@ -1,4 +1,4 @@
-import { ApiRouter, MiddlewareError } from "../src";
+import { ApiRouter, MiddlewareError } from "../../src";
 
 describe("Router", () => {
   let router: ApiRouter;
