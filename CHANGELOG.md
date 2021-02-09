@@ -33,6 +33,18 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ### Added
 - the `libs` code is minified using `terser`.
 
+## [1.1.0] - 2020-02-09
+
+### Added
+- The component `logger` is added.
+- The logger works with `process.stdout.write` and `process.stderr.write`.
+- Enable api options.
+  
+### Changed
+- Refactor the class `request` by the logger support.
+- Change the method `getResponse()` to `toResponse()`.
+
+[1.1.0]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.1.0
 [1.0.3]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.0.3
 [1.0.2]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.0.2
 [1.0.1]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.0.1

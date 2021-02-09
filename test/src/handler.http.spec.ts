@@ -15,7 +15,7 @@ import { performance } from "perf_hooks";
 import { deepCopy } from "../utils";
 
 describe("Handler with AWS API Gateway HTTP API", () => {
-  const api = new Api();
+  const api = new Api({ logger: { trace: true } });
   const router = new ApiRouter({ basePath: "/users" });
 
   beforeAll(() => {

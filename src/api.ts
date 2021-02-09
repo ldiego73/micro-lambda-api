@@ -1,13 +1,27 @@
 import { ApiError, HttpError, MethodError, RouteError } from "./errors";
 import { HttpStatus } from "./http";
+import { Logger, LoggerOptions, LogHandlerFunction } from "./logger";
 import { ApiRequest } from "./request";
 import { ApiResponse, Response, ResponseError } from "./response";
 import { getRouteParams, HandlerFunction, Route, RouteParams } from "./router";
 
+export interface ApiOptions {
+  logger?: ApiOptionsLogger;
+}
+
+export interface ApiOptionsLogger {
+  trace?: boolean;
+  pretty?: boolean;
+  handler?: LogHandlerFunction;
+}
 export class Api {
   private routes: Route[] = [];
   private middlewares: HandlerFunction[] = [];
   private middlewareFinally?: HandlerFunction;
+
+  readonly log = Logger.create();
+
+  constructor(private options: ApiOptions = {}) {}
 
   use(middlewares: Route[] | HandlerFunction[]): Api {
     for (const m of middlewares) {
@@ -22,12 +36,23 @@ export class Api {
   }
 
   finally(handler: HandlerFunction): void {
-    this.middlewareFinally = handler;
+    /* istanbul ignore else */
+    if (typeof handler === "function") this.middlewareFinally = handler;
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   async listen(event: any, context: any): Promise<Response> {
     const request = new ApiRequest(event, context);
+    const loggerOptions: LoggerOptions = { context };
+
+    if (typeof this.options.logger !== "undefined") {
+      loggerOptions.pretty = this.options.logger.pretty || undefined;
+      loggerOptions.handler = this.options.logger.handler || undefined;
+    }
+
+    Logger.configure(loggerOptions);
+
+    const isTrace = this.options.logger?.trace || false;
 
     try {
       if (!this.routes.length) {
@@ -53,18 +78,35 @@ export class Api {
 
       request.params = params;
 
+      if (isTrace) this.trace("REQUEST", "request", request.toRequest());
+
       await this.executeMiddlewares(request, response);
 
       const responseHandler = await route.handler(request, response);
-      const responseApi = response.getResponse();
+      const responseApi = response.toResponse();
 
+      /* istanbul ignore else */
       if (this.middlewareFinally)
         await this.middlewareFinally(request, response);
 
-      return responseApi || response.send(responseHandler);
+      const result = responseApi || response.send(responseHandler);
+
+      if (isTrace) this.trace("RESPONSE", "response", result);
+
+      return result;
     } catch (err: any) {
-      return this.handleErrors(err, request);
+      const error = this.handleErrors(err, request);
+
+      if (isTrace) this.trace("ERROR", "error", error);
+
+      return error;
     }
+  }
+
+  private trace(message: string, key: string, value: any): void {
+    this.log.clearExtras();
+    this.log.addExtra(key, value);
+    this.log.trace(message);
   }
 
   private async executeMiddlewares(
@@ -124,8 +166,6 @@ export class Api {
       }
     }
 
-    return response
-      .status(status)
-      .error(responseError);
+    return response.status(status).error(responseError);
   }
 }

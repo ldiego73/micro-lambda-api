@@ -33,7 +33,7 @@ export declare class ApiResponse {
     private setDefaultCors;
     private getDefaultCors;
     cors(options?: CorsOptions): ApiResponse;
-    getResponse(): Response;
+    toResponse(): Response;
     send(payload?: unknown, isError?: boolean): Response;
     json(body: any): Response;
     html(body: string): Response;

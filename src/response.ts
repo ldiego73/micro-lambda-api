@@ -101,7 +101,7 @@ export class ApiResponse {
     return this;
   }
 
-  getResponse(): Response {
+  toResponse(): Response {
     return this.response;
   }
 
