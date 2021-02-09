@@ -1,26 +1,33 @@
 import qs from "querystring";
 import { HttpIntegration, HttpMethod } from "./http";
+import { Logger } from "./logger";
 import { normalizePath, parseBody } from "./utils";
+interface Request {
+  id: string;
+  stage: string;
+  method: string;
+  path: string;
+  query: {
+    [key: string]: string | undefined;
+  };
+  params?: {
+    [key: string]: string | undefined;
+  };
+  headers: {
+    [key: string]: string | undefined;
+  };
+  body: any;
+  host: string;
+  ip: string;
+  userAgent: string;
+  proxyIntegration: HttpIntegration;
+  isBase64Encoded: boolean;
+}
+
 export class ApiRequest {
-  private _id: string;
-  private _stage: string;
-  private _method: string;
-  private _path: string;
-  private _query: {
-    [key: string]: string | undefined;
-  } = {};
-  private _params: {
-    [key: string]: string | undefined;
-  } = {};
-  private _headers: {
-    [key: string]: string | undefined;
-  } = {};
-  private _body: any;
-  private _host: string;
-  private _ip: string;
-  private _userAgent: string;
-  private _proxyIntegration: HttpIntegration;
-  private _isBase64Encoded: boolean;
+  private _request: Request;
+
+  readonly log = Logger.create();
 
   [key: string]: any;
 
@@ -45,115 +52,131 @@ export class ApiRequest {
 
     path = normalizePath(path);
 
-    this._id = context.awsRequestId || requestContext.requestId;
-    this._stage = rawStage === "$default" ? "" : rawStage;
-    this._method =
+    const id = context.awsRequestId || requestContext.requestId;
+    const stage = rawStage === "$default" ? "" : rawStage;
+    const method =
       event.httpMethod ||
       requestContext.http?.method ||
       requestContext.httpMethod ||
       HttpMethod.GET;
-    this._path = path;
-    this._query = Object.assign({}, event.queryStringParameters);
+    const query = Object.assign({}, event.queryStringParameters);
+    const headers: any = {};
 
     if (event.headers) {
       for (const header in event.headers) {
-        this._headers[header.toLowerCase()] = event.headers[header];
+        headers[header.toLowerCase()] = event.headers[header];
       }
-      this._headers["x-request-id"] = this._id;
+      headers["x-request-id"] = id;
     }
 
     const rawBody = isBase64Encoded
       ? Buffer.from(event.body || "", "base64").toString()
       : event.body;
+    let body: any;
 
     if (
-      this._headers["content-type"] &&
-      this._headers["content-type"].includes(
-        "application/x-www-form-urlencoded"
-      )
+      headers["content-type"] &&
+      headers["content-type"].includes("application/x-www-form-urlencoded")
     ) {
-      this._body = qs.parse(rawBody);
+      body = qs.parse(rawBody);
     } else if (typeof rawBody === "object") {
-      this._body = rawBody;
+      body = rawBody;
     } else {
-      this._body = parseBody(rawBody);
+      body = parseBody(rawBody);
     }
 
-    this._host = this._headers.host || requestContext.domainName;
-
+    const host = headers.host || requestContext.domainName;
     const rawIp =
-      this._headers["x-forwarded-for"] ||
+      headers["x-forwarded-for"] ||
       requestContext.http?.sourceIp ||
       requestContext.identity?.sourceIp ||
       "";
-
-    this._ip = rawIp.split(",")[0].trim();
-    this._userAgent =
-      this._headers["user-agent"] ||
+    const ip = rawIp.split(",")[0].trim();
+    const userAgent =
+      headers["user-agent"] ||
       requestContext.http?.userAgent ||
       requestContext.identity?.userAgent ||
       "";
-    this._proxyIntegration = requestContext.elb
+    const proxyIntegration = requestContext.elb
       ? HttpIntegration.ALB
       : event["version"] === "2.0"
       ? HttpIntegration.APIGW_HTTP_API
       : HttpIntegration.APIGW_REST_API;
-    this._isBase64Encoded = isBase64Encoded;
+
+    this._request = {
+      id,
+      stage,
+      method,
+      path,
+      query,
+      headers,
+      body,
+      host,
+      ip,
+      userAgent,
+      proxyIntegration,
+      isBase64Encoded,
+    };
   }
 
   get id(): string {
-    return this._id;
+    return this._request.id;
   }
 
   get stage(): string {
-    return this._stage;
+    return this._request.stage;
   }
 
   get method(): string {
-    return this._method;
+    return this._request.method;
   }
 
   get path(): string {
-    return this._path;
+    return this._request.path;
   }
 
   get query(): { [key: string]: string | undefined } {
-    return this._query;
+    return this._request.query;
   }
 
   get params(): { [key: string]: string | undefined } {
-    return this._params;
+    return this._request.params || {};
   }
 
   set params(value: { [key: string]: string | undefined }) {
-    this._params = value;
+    this._request.params = value;
   }
 
   get headers(): { [key: string]: string | undefined } {
-    return this._headers;
+    return this._request.headers;
   }
 
   get body(): any {
-    return this._body;
+    return this._request.body;
   }
 
   get host(): string {
-    return this._host;
+    return this._request.host;
   }
 
   get ip(): string {
-    return this._ip;
+    return this._request.ip;
   }
 
   get userAgent(): string {
-    return this._userAgent;
+    return this._request.userAgent;
   }
 
   get proxyIntegration(): HttpIntegration {
-    return this._proxyIntegration;
+    return this._request.proxyIntegration;
   }
 
   get isBase64Encoded(): boolean {
-    return this._isBase64Encoded;
+    return this._request.isBase64Encoded;
+  }
+
+  toRequest(): Request {
+    /* istanbul ignore next */
+    return this._request || {};
   }
 }

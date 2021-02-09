@@ -40,8 +40,9 @@ That library has taken reference to some libraries such as:
 - [Features](#features)
 - [Installation](#installation)
 - [Getting Started](#getting-started)
+- [Options](#options)
 - [Router](#router)
-  - [Options](#options)
+  - [Options](#options-1)
   - [Methods ⇒ `ApiRouter`](#methods--apirouter)
   - [Middleware => `ApiRouter`](#middleware--apirouter)
   - [Router prefixes](#router-prefixes)
@@ -54,18 +55,24 @@ That library has taken reference to some libraries such as:
 - [Request](#request)
   - [Properties](#properties)
 - [Response](#response)
-  - [Options](#options-1)
+  - [Options](#options-2)
   - [Methods](#methods)
     - [status(code) ⇒ `ApiResponse`](#statuscode--apiresponse)
     - [header(key, value) ⇒ `ApiResponse`](#headerkey-value--apiresponse)
     - [cors(options) ⇒ `ApiResponse`](#corsoptions--apiresponse)
-    - [getResponse()](#getresponse)
+    - [toResponse()](#toresponse)
     - [send(payload, isError)](#sendpayload-iserror)
     - [json(body)](#jsonbody)
     - [html(body)](#htmlbody)
     - [file(body)](#filebody)
     - [error(data)](#errordata)
 - [`finally`](#finally)
+- [Logger](#logger)
+  - [Configuration](#configuration)
+  - [`toLog()`](#tolog)
+  - [Grouping](#grouping)
+  - [Extras](#extras)
+  - [Pretty format](#pretty-format)
 - [Contributing](#contributing)
 - [Versioning](#versioning)
 - [Authors](#authors)
@@ -157,6 +164,35 @@ api.use(router.routes());
 export async function handler(event: any, context: any) {
   return await api.listen(event, context);
 }
+```
+## Options
+
+The api class has the following options:
+
+| Option              | Type   | Description                     |
+| ------------------- | ------ | ------------------------------- |
+| `logger` (Optional) | object | Custom the configuration logger |
+
+The `logger` option has the following options:
+
+| Option               | Type     | Description                                     |
+| -------------------- | -------- | ----------------------------------------------- |
+| `trace` (Optional)   | boolean  | Enable trace to request, response and errors    |
+| `pretty` (Optional)  | boolean  | Enable the pretty format to logger.             |
+| `handler` (Optional) | Function | Method that returns the response of each logger |
+
+Example:
+
+```ts
+const api = new Api({
+  logger: {
+    trace: true,
+    pretty: false,
+    handler: (log) => {
+      // process or transform the log
+    }
+  }
+});
 ```
 
 ## Router
@@ -453,6 +489,10 @@ exports.handler = (event, context) => {
 
     A Boolean value that identifies whether the body is in base64
 
+14. `log`
+
+    Property that allows you to manage the log on each request.
+
 You can add additional parameters if you are working with `ApiRouter` this will allow you to have more customization when you are using middlewares.
 
 ## Response
@@ -561,7 +601,7 @@ router.get("/", (req, res) => {
 })
 ```
 
-#### getResponse()
+#### toResponse()
 
 Returns the previous object that will be returned.
 
@@ -708,6 +748,120 @@ An api functionality is 'finally' which is a middleware that is invoked at the e
 api.finally((req, res) => {
   ...
 });
+```
+
+## Logger
+
+The logger class allows you to centralize logs in your Lambda using `process.stdout` or `process.stderr`.
+
+This component can be used independently.
+
+Example:
+
+```js
+const log = Logger.create();
+
+log.trace("Log trace");
+log.debug("Log debug");
+log.info("Log info");
+log.warn("Log warn");
+log.error("Log error");
+log.fatal("Log fatal");
+
+/*
+{"id":"ca4d341d-2c86-41a1-989b-9cd3b25ea05e","level":"trace","time":1612848015979,"timeStamp":"2021-02-09T05:20:15.979Z","message":"Log trace","lambda":{"name":"myFunction","version":"1.0.0","memoryLimitInMB":1024,"arn":"my:arn:myFunction"}}
+*/
+```
+
+### Configuration
+
+| Option               | Type     | Description                                      |
+| -------------------- | -------- | ------------------------------------------------ |
+| `context` (Optional) | boolean  | Object containing the request id and lambda data |
+| `pretty` (Optional)  | boolean  | Enable the pretty format to logger.              |
+| `handler` (Optional) | Function | Method that returns the response of each logger  |
+
+Example:
+
+```js
+Logger.configure({
+  context: { ... },
+  pretty: false,
+  handler: (log) => { ... },
+})
+const log = Logger.create();
+```
+
+### `toLog()`
+
+Method that returns a json object with the basic structure of the log:
+
+```ts
+interface Log {
+  id: string;
+  level: string;
+  group?: string;
+  message: string;
+  data?: unknown;
+  time: number;
+  timeStamp: string;
+  lambda?: LogLambda;
+  [key: string]: any;
+}
+```
+
+| Option            | Type   | Description                                                |
+|-------------------|--------|------------------------------------------------------------|
+| id                | string | Request ID in format UUID V4                               |
+| level             | string | Logger level. Example: info, trace, error, etc.            |
+| group (Optional)  | string | Grouping logs                                              |
+| message           | string | Log message                                                |
+| data (Optional)   | object | Additional information that can be shared to the log       |
+| time              | number | The `datetime` in long                                     |
+| timeStamp         | string | The `datetime` in ISO String                               |
+| lambda (Optional) | string | Information about lambda. Example: name, memory, arn, etc. |
+| [key: string]     | any    | any additional parameters                                  |
+
+### Grouping
+
+To group logs you should use the `group(name)` function
+
+```js
+const log = Logger.create();
+const grupo1 = Logger.group("group1");
+const grupo2 = Logger.group("group2");
+
+grupo1.trace("Log trace");
+grupo2.debug("Log debug");
+```
+
+### Extras
+
+If you want to add additional parameters when displaying the log.
+
+```js
+const log = Logger.create();
+
+log.addExtra("request", {...});
+log.getExtra("request");
+log.removeExtra("request");
+log.clearExtras();
+```
+
+### Pretty format
+
+By default all the logs print in json format, enable the option pretty in true is posible return the logs in text.
+
+Example:
+
+```js
+Logger.configure({ pretty: true });
+
+const log = Logger.create();
+
+log.trace("This is a log");
+
+// Return => [2021-02-09T05:20:15.985Z] [TRACE] - This is a log.
 ```
 
 ## Contributing

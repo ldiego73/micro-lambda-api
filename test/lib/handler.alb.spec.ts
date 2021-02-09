@@ -15,7 +15,7 @@ import { performance } from "perf_hooks";
 import { deepCopy } from "../utils";
 
 describe("Handler with AWS Application Loader Balancer", () => {
-  const api = new Api();
+  const api = new Api({ logger: { pretty: true, trace: false } });
   const router = new ApiRouter();
 
   beforeAll(() => {
