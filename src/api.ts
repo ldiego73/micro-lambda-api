@@ -46,14 +46,14 @@ export class Api {
     const loggerOptions: LoggerOptions = { context };
     const isTrace = this.options.logger?.trace || false;
 
-    if (isTrace) this.trace("REQUEST", "request", request.toRequest());
-
     if (typeof this.options.logger !== "undefined") {
       loggerOptions.pretty = this.options.logger.pretty || undefined;
       loggerOptions.handler = this.options.logger.handler || undefined;
     }
 
     Logger.configure(loggerOptions);
+
+    if (isTrace) this.trace("REQUEST", "request", request.toRequest());
 
     try {
       if (!this.routes.length) {
