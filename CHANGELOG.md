@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
+## [1.1.1] - 2020-02-13
+
+### Changed
+- Move the trace `request` to the first lines of code the method `listen`.
+- Separate `handleErrors()` in two variables `Response` and `ResponseError`.
+
 ## [1.1.0] - 2020-02-09
 
 ### Added
@@ -44,6 +50,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ### Added
 - Structure project
 
+[1.1.1]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.1.1
 [1.1.0]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.1.0
 [1.0.3]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.0.3
 [1.0.2]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.0.2

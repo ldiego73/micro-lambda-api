@@ -44,6 +44,9 @@ export class Api {
   async listen(event: any, context: any): Promise<Response> {
     const request = new ApiRequest(event, context);
     const loggerOptions: LoggerOptions = { context };
+    const isTrace = this.options.logger?.trace || false;
+
+    if (isTrace) this.trace("REQUEST", "request", request.toRequest());
 
     if (typeof this.options.logger !== "undefined") {
       loggerOptions.pretty = this.options.logger.pretty || undefined;
@@ -51,8 +54,6 @@ export class Api {
     }
 
     Logger.configure(loggerOptions);
-
-    const isTrace = this.options.logger?.trace || false;
 
     try {
       if (!this.routes.length) {
@@ -78,8 +79,6 @@ export class Api {
 
       request.params = params;
 
-      if (isTrace) this.trace("REQUEST", "request", request.toRequest());
-
       await this.executeMiddlewares(request, response);
 
       const responseHandler = await route.handler(request, response);
@@ -95,11 +94,11 @@ export class Api {
 
       return result;
     } catch (err: any) {
-      const error = this.handleErrors(err, request);
+      const [result, error] = this.handleErrors(err, request);
 
       if (isTrace) this.trace("ERROR", "error", error);
 
-      return error;
+      return result;
     }
   }
 
@@ -135,7 +134,10 @@ export class Api {
     return undefined;
   }
 
-  private handleErrors(err: any, request: ApiRequest): Response {
+  private handleErrors(
+    err: any,
+    request: ApiRequest
+  ): [Response, ResponseError] {
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
 
     const response = new ApiResponse(request);
@@ -166,6 +168,6 @@ export class Api {
       }
     }
 
-    return response.status(status).error(responseError);
+    return [response.status(status).error(responseError), responseError];
   }
 }
