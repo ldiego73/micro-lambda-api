@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="Logo" src="images/icon.svg" height="96" />
+  <img alt="Logo" src="images/logo.svg" height="96" />
 </div>
 
 <p align="center">
@@ -37,6 +37,7 @@ That library has taken reference to some libraries such as:
 ## API Reference
 
 - [API Reference](#api-reference)
+- [About the library](#about-the-library)
 - [Features](#features)
 - [Installation](#installation)
 - [Getting Started](#getting-started)
@@ -57,15 +58,15 @@ That library has taken reference to some libraries such as:
 - [Response](#response)
   - [Options](#options-2)
   - [Methods](#methods)
-    - [status(code) ⇒ `ApiResponse`](#statuscode--apiresponse)
-    - [header(key, value) ⇒ `ApiResponse`](#headerkey-value--apiresponse)
-    - [cors(options) ⇒ `ApiResponse`](#corsoptions--apiresponse)
-    - [toResponse()](#toresponse)
-    - [send(payload, isError)](#sendpayload-iserror)
-    - [json(body)](#jsonbody)
-    - [html(body)](#htmlbody)
-    - [file(body)](#filebody)
-    - [error(data)](#errordata)
+    - [`status(code)` ⇒ `ApiResponse`](#statuscode--apiresponse)
+    - [`header(key, value)` ⇒ `ApiResponse`](#headerkey-value--apiresponse)
+    - [`cors(options)` ⇒ `ApiResponse`](#corsoptions--apiresponse)
+    - [`toResponse()`](#toresponse)
+    - [`send(payload, isError)`](#sendpayload-iserror)
+    - [`json(body)`](#jsonbody)
+    - [`html(body)`](#htmlbody)
+    - [`file(body)`](#filebody)
+    - [`error(data)`](#errordata)
 - [`finally`](#finally)
 - [Logger](#logger)
   - [Configuration](#configuration)
@@ -79,16 +80,22 @@ That library has taken reference to some libraries such as:
 - [License](#license)
 - [Support](#support)
 
+## About the library
+
+This library aims to abstract the logic to perform REQUESTs and RESPONSEs in a simple and easy way that allows you to focus on the development of your lambda functionality. It has a LOGGER implementation using JSON to have a better traceability and control of events when it is sent to CloudWatch or another log monitoring platform.
+
 ## Features
 
 - Integration with Gateway Lambda Proxy Integrator API using REST API or HTTP API.
 - Integration with ALB Lambda Target Support.
 - Enabling CORS for requests.
 - No external dependencies.
-- You can use the separate `Request` and `Response`. Without requiring the final
-- Midleware router to run after all middleware and routes have been completed.
-- Creating multiple routers to handle different versions.
-- Typescript support
+- You can use the separate `Request`, `Response` and `Logger`.
+- The final middleware router runs after all routes and middleware have completed.
+- Creation of multiple routers with different versions.
+- Enable logger using `process.stdout` and `process.stderr`.
+- Typescript support.
+
 
 ## Installation
 
@@ -199,7 +206,7 @@ const api = new Api({
 
 Class that defines the different HTTP methods
 
-Basic use
+Basic use:
 
 ```ts
 import { Api, ApiRouter } from "micro-lambda-api";
@@ -553,7 +560,7 @@ exports.handler = (event, context) => {
 
 ### Methods
 
-#### status(code) ⇒ `ApiResponse`
+#### `status(code)` ⇒ `ApiResponse`
 
 Sets the status of the response that was returned to the Gateway API or ALB. By default, the response status is `200` and `500` for a general error.
 
@@ -569,7 +576,7 @@ router.get("/", (req, res) => {
 });
 ```
 
-#### header(key, value) ⇒ `ApiResponse`
+#### `header(key, value)` ⇒ `ApiResponse`
 
 Use the header function if you want to add custom header that They will be returned to the Gateway API or ALB.
 
@@ -585,7 +592,7 @@ router.get("/", (req, res) => {
 })
 ```
 
-#### cors(options) ⇒ `ApiResponse`
+#### `cors(options)` ⇒ `ApiResponse`
 
 Allows you to add custom cors for each request. If you want to work with the cors by default, use the static value cors.
 
@@ -601,7 +608,7 @@ router.get("/", (req, res) => {
 })
 ```
 
-#### toResponse()
+#### `toResponse()`
 
 Returns the previous object that will be returned.
 
@@ -619,7 +626,7 @@ interface Response {
 }
 ```
 
-#### send(payload, isError)
+#### `send(payload, isError)`
 
 Allows you to send a json object or string that will be transformed to a string that is the data that API Gateway or ALB expects to receive.
 
@@ -659,7 +666,7 @@ res.send({
 }
 ```
 
-#### json(body)
+#### `json(body)`
 
 A metode that defaults to the `conten-type` header in `application/json` And that receives as a parameter a JSON.
 
@@ -671,7 +678,7 @@ res.json({
 });
 ```
 
-#### html(body)
+#### `html(body)`
 
 A metode that defaults to the `conten-type` header in `text/html; charset=UTF-8` And that receives as a parameter a String.
 
@@ -679,15 +686,15 @@ A metode that defaults to the `conten-type` header in `text/html; charset=UTF-8`
 res.json("<h1>Hello World</h1>");
 ```
 
-#### file(body)
+#### `file(body)`
 
-A metode that defaults to the `conten-type` header in `tapplication/octet-stream` And that receives as a parameter a String.
+A method that defaults to the `conten-type` header in `tapplication/octet-stream` And that receives as a parameter a String.
 
 ```js
 res.json("This is a file");
 ```
 
-#### error(data)
+#### `error(data)`
 
 A metode that receives as a parameter an object with a structure Predefined (ResponseError) that will be sent to the `send` method
 

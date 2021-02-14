@@ -45,10 +45,10 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 - Integration with ALB Lambda Target Support.
 - Enabling CORS for requests.
 - No external dependencies.
-- You can use the separate Request and Response. Without requiring the final
-- Midleware router to run after all middleware and routes have been completed.
-- Creating multiple routers to handle different versions.
-- Typescript support
+- You can use the separate `Request` and `Response`.
+- The final middleware router runs after all routes and middleware have completed.
+- Creation of multiple routers with different versions.
+- Typescript support.
 
 ## 1.0.0 - 2020-02-07
 
