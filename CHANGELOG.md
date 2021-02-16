@@ -60,6 +60,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ### Added
 - Structure project
 
+[1.1.3]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.1.3
 [1.1.2]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.1.2
 [1.1.1]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.1.1
 [1.1.0]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.1.0
