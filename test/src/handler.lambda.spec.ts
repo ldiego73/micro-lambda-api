@@ -29,7 +29,6 @@ describe("Handler with AWS API Gateway HTTP API", () => {
 
     expect(result.body).toBe(JSON.stringify(request.body));
     expect(result.statusCode).toBe(HttpStatus.OK);
-    expect(result.headers).toMatchObject(request.headers);
     expect(result.isBase64Encoded).toBe(request.isBase64Encoded);
     expect(result.statusDescription).toBeUndefined();
   });
@@ -46,7 +45,6 @@ describe("Handler with AWS API Gateway HTTP API", () => {
 
     expect(result.body).toBe(JSON.stringify(responseError));
     expect(result.statusCode).toBe(HttpStatus.BAD_REQUEST);
-    expect(result.headers).toMatchObject(request.headers);
     expect(result.isBase64Encoded).toBeFalsy();
     expect(result.statusDescription).toBeUndefined();
   });
