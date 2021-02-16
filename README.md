@@ -1,6 +1,8 @@
 <div align="center">
-  <img alt="Logo" src="images/logo.svg" height="96" />
+  <img alt="Logo" src="images/icon.svg" height="96" />
 </div>
+
+<br />
 
 <p align="center">
   <a href="https://github.com/ldiego73/micro-lambda-api/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">

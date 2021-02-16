@@ -35,11 +35,15 @@ export class ApiResponse {
   private statusCode = HttpStatus.OK;
   headers: {
     [key: string]: string | undefined;
+  } = {
+    "content-type": "application/json",
   };
   private response: any;
 
   constructor(private request?: ApiRequest) {
-    this.headers = Object.assign({}, request?.headers);
+    if (request && request.headers["x-request-id"]) {
+      this.headers["x-request-id"] = request.headers["x-request-id"];
+    }
   }
 
   status(code: HttpStatus): ApiResponse {
