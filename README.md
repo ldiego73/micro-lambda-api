@@ -434,6 +434,28 @@ socket.action("message", (req, res) => {
 app.use(socket.actions()).use(socket.middlewares());
 ```
 
+Example: Sending a message from the **Server** to the **Application**
+
+```ts
+socket
+  .action("message", async (req, res) => {
+    const connectionId = req.connectionId || "";
+    const apiWs = new ApiGatewayManagementApi({
+      apiVersion: "2018-11-29",
+      endpoint: `https://${req.host}/${req.stage}`,
+    });
+
+    await apiWs
+      .postToConnection({
+        ConnectionId: connectionId,
+        Data: // My Custom Data in JS Object,
+      })
+      .promise();
+
+    res.send("Message sent!!!");
+  });
+```
+
 ### Methods ⇒ `ApiSocket`
 
 Socket defines the following 3 methods: `connect`, `disconnect`, `action`
@@ -461,28 +483,6 @@ socket
 ```
 
 When an action is not found it will return the following error: `ActionError`.
-
-Example: Sending a message from the **Server** to the **Application**
-
-```ts
-socket
-  .action("message", async (req, res) => {
-    const connectionId = req.connectionId || "";
-    const apiWs = new ApiGatewayManagementApi({
-      apiVersion: "2018-11-29",
-      endpoint: `https://${req.host}/${req.stage}`,
-    });
-
-    await apiWs
-      .postToConnection({
-        ConnectionId: connectionId,
-        Data: // My Custom Data in JS Object,
-      })
-      .promise();
-
-    res.send("Message sent!!!");
-  });
-```
 
 ### Middleware => `ApiSocket`
 
