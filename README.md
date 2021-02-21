@@ -437,6 +437,8 @@ app.use(socket.actions()).use(socket.middlewares());
 Example: Sending a message from the **Server** to the **Application**
 
 ```ts
+import { ApiGatewayManagementApi } from "aws-sdk";
+
 socket
   .action("message", async (req, res) => {
     const connectionId = req.connectionId || "";
