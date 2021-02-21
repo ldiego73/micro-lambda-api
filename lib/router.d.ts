@@ -1,7 +1,4 @@
-import { RouterOptions } from "./options";
-import { ApiRequest } from "./request";
-import { ApiResponse } from "./response";
-export declare type HandlerFunction = (request: ApiRequest, response: ApiResponse) => void | any | Promise<any>;
+import { HandlerFunction, RouterOptions } from "./options";
 export interface Route {
     path: string;
     method: string;
@@ -11,6 +8,7 @@ export interface RouteParams {
     [key: string]: string | undefined;
 }
 export declare function getRouteParams(route: string, path: string): RouteParams | undefined;
+export declare const instanceOfRoute: (middleware: any) => middleware is Route;
 export declare class ApiRouter {
     private options?;
     private _routes;

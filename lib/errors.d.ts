@@ -3,6 +3,7 @@ export declare const ApiError: {
     METHOD_NOT_ALLOWED: string;
     MIDDLEWARE_ERROR: string;
     ROUTE_NOT_FOUND: string;
+    ACTION_NOT_FOUND: string;
 };
 export declare class HttpError extends Error {
     code: string;
@@ -17,6 +18,10 @@ export declare class MethodError extends HttpError {
 export declare class RouteError extends HttpError {
     path: string;
     constructor(path: string);
+}
+export declare class ActionError extends HttpError {
+    name: string;
+    constructor(name: string);
 }
 export declare class MiddlewareError extends HttpError {
     constructor();

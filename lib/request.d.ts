@@ -4,6 +4,7 @@ interface Request {
     id: string;
     stage: string;
     method: string;
+    route: string;
     path: string;
     query: {
         [key: string]: string | undefined;
@@ -20,6 +21,7 @@ interface Request {
     userAgent: string;
     proxyIntegration: HttpIntegration;
     isBase64Encoded: boolean;
+    connectionId?: string;
 }
 export declare class ApiRequest {
     private _request;
@@ -48,6 +50,8 @@ export declare class ApiRequest {
     get userAgent(): string;
     get proxyIntegration(): HttpIntegration;
     get isBase64Encoded(): boolean;
+    get connectionId(): string | undefined;
+    get route(): string;
     toRequest(): Request;
 }
 export {};

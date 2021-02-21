@@ -56,7 +56,8 @@ export declare const HttpMethod: {
 export declare enum HttpIntegration {
     ALB = "elb",
     APIGW_REST_API = "apigw-rest-api",
-    APIGW_HTTP_API = "apigw-http-api"
+    APIGW_HTTP_API = "apigw-http-api",
+    APIGW_WS_API = "apigw-ws-api"
 }
 export declare const HttpHeadersCors: {
     ORIGIN: string;

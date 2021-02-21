@@ -1,15 +1,7 @@
 import { MiddlewareError } from "./errors";
 import { HttpMethod } from "./http";
-import { RouterOptions } from "./options";
-import { ApiRequest } from "./request";
-import { ApiResponse } from "./response";
+import { HandlerFunction, RouterOptions } from "./options";
 import { getPathKeys, getPathValues, normalizePath } from "./utils";
-
-export declare type HandlerFunction = (
-  request: ApiRequest,
-  response: ApiResponse
-) => void | any | Promise<any>;
-
 export interface Route {
   path: string;
   method: string;
@@ -42,6 +34,10 @@ export function getRouteParams(
 
   return undefined;
 }
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const instanceOfRoute = (middleware: any): middleware is Route =>
+  "path" in middleware && "method" in middleware;
 
 export class ApiRouter {
   private _routes: Route[] = [];

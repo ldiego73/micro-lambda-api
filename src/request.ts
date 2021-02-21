@@ -6,6 +6,7 @@ interface Request {
   id: string;
   stage: string;
   method: string;
+  route: string;
   path: string;
   query: {
     [key: string]: string | undefined;
@@ -22,6 +23,8 @@ interface Request {
   userAgent: string;
   proxyIntegration: HttpIntegration;
   isBase64Encoded: boolean;
+  // Available for WebSocket
+  connectionId?: string;
 }
 
 export class ApiRequest {
@@ -37,15 +40,15 @@ export class ApiRequest {
     const { isBase64Encoded } = event;
 
     const rawStage = requestContext.stage || "";
-    const routeKey = requestContext.resourcePath || requestContext.routeKey;
+    const route = requestContext.resourcePath || requestContext.routeKey;
 
     let path = event.path || event.rawPath || "/";
 
     if (
       rawStage &&
-      routeKey &&
+      route &&
       path.indexOf(`/${rawStage}/`) === 0 &&
-      routeKey.indexOf(`/${rawStage}/`) !== 0
+      route.indexOf(`/${rawStage}/`) !== 0
     ) {
       path = path.substring(rawStage.length + 1);
     }
@@ -71,7 +74,7 @@ export class ApiRequest {
 
     const rawBody = isBase64Encoded
       ? Buffer.from(event.body || "", "base64").toString()
-      : event.body;
+      : event.body || "";
     let body: any;
 
     if (
@@ -85,6 +88,7 @@ export class ApiRequest {
       body = parseBody(rawBody);
     }
 
+    const connectionId = requestContext.connectionId || "";
     const host = headers.host || requestContext.domainName;
     const rawIp =
       headers["x-forwarded-for"] ||
@@ -97,16 +101,21 @@ export class ApiRequest {
       requestContext.http?.userAgent ||
       requestContext.identity?.userAgent ||
       "";
-    const proxyIntegration = requestContext.elb
-      ? HttpIntegration.ALB
-      : event["version"] === "2.0"
-      ? HttpIntegration.APIGW_HTTP_API
-      : HttpIntegration.APIGW_REST_API;
+
+    let proxyIntegration: HttpIntegration;
+
+    if (requestContext.elb) proxyIntegration = HttpIntegration.ALB;
+    else if (event["version"] === "2.0")
+      proxyIntegration = HttpIntegration.APIGW_HTTP_API;
+    else if (requestContext.eventType)
+      proxyIntegration = HttpIntegration.APIGW_WS_API;
+    else proxyIntegration = HttpIntegration.APIGW_REST_API;
 
     this._request = {
       id,
       stage,
       method,
+      route,
       path,
       query,
       headers,
@@ -117,6 +126,10 @@ export class ApiRequest {
       proxyIntegration,
       isBase64Encoded,
     };
+
+    // Available for WebSocket
+    /* istanbul ignore else */
+    if (connectionId) this._request.connectionId = connectionId;
   }
 
   get id(): string {
@@ -173,6 +186,15 @@ export class ApiRequest {
 
   get isBase64Encoded(): boolean {
     return this._request.isBase64Encoded;
+  }
+
+  // Available for WebSocket
+  get connectionId(): string | undefined {
+    return this._request.connectionId;
+  }
+
+  get route(): string {
+    return this._request.route;
   }
 
   toRequest(): Request {

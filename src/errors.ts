@@ -3,6 +3,7 @@ export const ApiError = {
   METHOD_NOT_ALLOWED: "METHOD_NOT_ALLOWED",
   MIDDLEWARE_ERROR: "MIDDLEWARE_ERROR",
   ROUTE_NOT_FOUND: "ROUTE_NOT_FOUND",
+  ACTION_NOT_FOUND: "ACTION_NOT_FOUND",
 };
 
 export class HttpError extends Error {
@@ -22,6 +23,14 @@ export class MethodError extends HttpError {
 export class RouteError extends HttpError {
   constructor(public path: string) {
     super(ApiError.ROUTE_NOT_FOUND, "Route not found");
+
+    this.name = this.constructor.name;
+  }
+}
+
+export class ActionError extends HttpError {
+  constructor(public name: string) {
+    super(ApiError.ACTION_NOT_FOUND, "Action not found");
 
     this.name = this.constructor.name;
   }

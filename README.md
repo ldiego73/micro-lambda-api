@@ -55,6 +55,10 @@ That library has taken reference to some libraries such as:
     - [`middlewares()`](#middlewares)
   - [Static](#static)
     - [`getRouteParams(route, path)`](#getrouteparamsroute-path)
+- [Socket](#socket)
+  - [Methods ⇒ `ApiSocket`](#methods--apisocket)
+  - [Middleware => `ApiSocket`](#middleware--apisocket)
+  - [Action responses](#action-responses)
 - [Request](#request)
   - [Properties](#properties)
 - [Response](#response)
@@ -268,12 +272,12 @@ router
     return true;
   })
   .patch("/users/:id", async (req, res) => {
-    const user = updateStatus(req.param.id, true);
+    const user = await updateStatus(req.param.id, true);
 
     return user;
   })
   .put("/users/:id", async (req, res) => {
-    const user = updateUser(user);
+    const user = await updateUser(user);
 
     return user;
   })
@@ -409,6 +413,121 @@ Example:
 ```ts
 const params = getRouteParams("/users/:id/:username", "/users/1/admin");
 // return { id: 1, username: "admin" }
+```
+
+## Socket
+
+Class that defines the different Actions to Api Gateway WebSocket.
+
+Basic use:
+
+```ts
+import { Api, ApiSocket } from "micro-lambda-api";
+
+const api = new Api();
+const socket = new ApiSocket();
+
+socket.action("message", (req, res) => {
+  // Process and return data
+});
+
+app.use(socket.actions()).use(socket.middlewares());
+```
+
+### Methods ⇒ `ApiSocket`
+
+Socket defines the following 3 methods: `connect`, `disconnect`, `action`
+
+```ts
+socket
+  .connect(async (req, res) => {
+    await suscribe();
+  })
+  .disconnect(async (req, res) => {
+    await unsuscribe();
+  })
+  .action("message", (req, res) => {
+    return "message";
+  })
+  .action("register", async (req, res) => {
+    const user = await register(req.body);
+
+    return user;
+  })
+```
+
+When a action is not found it will return the following error: `ActionError`.
+
+### Middleware => `ApiSocket`
+
+Middlewares are functions that allow them to be executed before any action.
+
+Example:
+
+```ts
+socket.use((req, res) => {
+  req.executionStart = performance.now();
+});
+```
+
+Multiple middlewares can be nested
+
+```ts
+socket
+  .use((req, res) => {
+    // Middleware 1
+  })
+  .use((req, res) => {
+    // Middleware 2
+  })
+  .use((req, res) => {
+    // Middleware 3
+  });
+```
+
+> NOTE: Remember that middlewares run according to the order that were created.
+
+### Action responses
+
+There are 2 ways to respond to the execution of a action
+
+Using the response class:
+
+```ts
+socket.action("message", (req, res) => {
+  res.send([
+    { id: 1, username: "admin" },
+    { id: 2, username: "demo" },
+  ]);
+});
+```
+
+Using `return`:
+
+```ts
+socket.action("register", (req, res) => {
+  return [
+    { id: 1, username: "admin" },
+    { id: 2, username: "demo" },
+  ];
+});
+```
+
+The `response` class provides more functionality such as, for example, changing the response status, adding custom headers, enabling cors, and so on
+
+You can also combine the use of `response` with `return`:
+
+```ts
+socket.action("message", (req, res) => {
+  res.status(201);
+  res.cors();
+  res.header("x-custom-header", "my-header");
+
+  return [
+    { id: 1, username: "admin" },
+    { id: 2, username: "demo" },
+  ];
+});
 ```
 
 ## Request

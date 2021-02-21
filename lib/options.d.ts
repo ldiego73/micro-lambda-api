@@ -1,3 +1,5 @@
+import { ApiRequest } from "./request";
+import { ApiResponse } from "./response";
 export interface RouterOptions {
     basePath?: string;
     version?: string;
@@ -10,3 +12,4 @@ export interface CorsOptions {
     methods?: string;
     origin?: string;
 }
+export declare type HandlerFunction = (request: ApiRequest, response: ApiResponse) => void | any | Promise<any>;
