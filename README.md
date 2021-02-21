@@ -442,9 +442,13 @@ Socket defines the following 3 methods: `connect`, `disconnect`, `action`
 socket
   .connect(async (req, res) => {
     await suscribe();
+
+    res.send("Connect!!!");
   })
   .disconnect(async (req, res) => {
     await unsuscribe();
+    
+    res.send("Disconnect!!!");
   })
   .action("message", (req, res) => {
     return "message";

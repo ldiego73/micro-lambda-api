@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
+## [1.2.1] - 2020-02-21
+
+### Changed
+- Update documentation about the response actions `connect` and `disconnect`.
+
 ## [1.2.0] - 2020-02-20
 
 ### Added
@@ -68,6 +73,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ### Added
 - Structure project
 
+[1.2.1]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.2.1
 [1.2.0]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.2.0
 [1.1.3]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.1.3
 [1.1.2]: https://github.com/ldiego73/micro-lambda-api/releases/tag/1.1.2
