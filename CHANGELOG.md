@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
+## [1.2.2] - 2020-02-21
+
+### Changed
+- The request properties have been updated by adding the `connectionId` and `route` properties.
+- Example of how to send a message from the server to the application.
+
 ## [1.2.1] - 2020-02-21
 
 ### Changed

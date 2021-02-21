@@ -462,6 +462,28 @@ socket
 
 When an action is not found it will return the following error: `ActionError`.
 
+Example: Sending a message from the **Server** to the **Application**
+
+```ts
+socket
+  .action("message", async (req, res) => {
+    const connectionId = req.connectionId || "";
+    const apiWs = new ApiGatewayManagementApi({
+      apiVersion: "2018-11-29",
+      endpoint: `https://${req.host}/${req.stage}`,
+    });
+
+    await apiWs
+      .postToConnection({
+        ConnectionId: connectionId,
+        Data: // My Custom Data in JS Object,
+      })
+      .promise();
+
+    res.send("Message sent!!!");
+  });
+```
+
 ### Middleware => `ApiSocket`
 
 Middlewares are functions that allow them to be executed before any action.
@@ -625,7 +647,15 @@ exports.handler = (event, context) => {
 
     Property that allows you to manage the log on each request.
 
-You can add additional parameters if you are working with `ApiRouter` this will allow you to have more customization when you are using middlewares.
+15. `connectionId`
+
+    Property that returns the id of the socket connection. This value can be **nullable**
+
+16. `route`
+
+    property that returns the router key to be used with the `ApiSocket`.
+
+You can add additional parameters if you are working with `ApiRouter` or `ApiSocket` this will allow you to have more customization when you are using **middlewares**.
 
 ## Response
 
