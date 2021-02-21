@@ -456,7 +456,7 @@ socket
   })
 ```
 
-When a action is not found it will return the following error: `ActionError`.
+When an action is not found it will return the following error: `ActionError`.
 
 ### Middleware => `ApiSocket`
 
