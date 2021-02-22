@@ -68,6 +68,7 @@ That library has taken reference to some libraries such as:
     - [`header(key, value)` ⇒ `ApiResponse`](#headerkey-value--apiresponse)
     - [`cors(options)` ⇒ `ApiResponse`](#corsoptions--apiresponse)
     - [`toResponse()`](#toresponse)
+    - [`toResponseError()`](#toresponseerror)
     - [`send(payload, isError)`](#sendpayload-iserror)
     - [`json(body)`](#jsonbody)
     - [`html(body)`](#htmlbody)
@@ -779,6 +780,23 @@ interface Response {
   body: string;
   headers: {
     [key: string]: string | undefined;
+  };
+}
+```
+
+#### `toResponseError()`
+
+Returns the previous object that will be returned.
+
+Structure:
+
+```ts
+export interface ResponseError {
+  status?: HttpStatus;
+  code: string;
+  message: string;
+  data?: {
+    [key: string]: unknown;
   };
 }
 ```

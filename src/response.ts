@@ -28,6 +28,7 @@ export interface ResponseError {
     [key: string]: unknown;
   };
 }
+
 export class ApiResponse {
   static cors = false;
   static credentials = false;
@@ -38,7 +39,8 @@ export class ApiResponse {
   } = {
     "content-type": "application/json",
   };
-  private response: any;
+  private _response: any;
+  private _error: any;
 
   constructor(private request?: ApiRequest) {
     if (request && request.headers["x-request-id"]) {
@@ -106,7 +108,11 @@ export class ApiResponse {
   }
 
   toResponse(): Response {
-    return this.response;
+    return this._response;
+  }
+
+  toResponseError(): ResponseError {
+    return this._error;
   }
 
   send(payload?: unknown, isError = false): Response {
@@ -139,7 +145,7 @@ export class ApiResponse {
       }`;
     }
 
-    this.response = response;
+    this._response = response;
 
     return response;
   }
@@ -158,21 +164,20 @@ export class ApiResponse {
 
   error(data: ResponseError | string): Response {
     if (typeof data === "string") {
-      return this.send({
+      this._error = {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
         code: ApiError.GENERIC_ERROR,
         message: data,
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-      });
-    }
-
-    return this.send(
-      {
+      } as ResponseError;
+    } else {
+      this._error = {
         status: data.status,
         code: data.code,
         message: data.message,
         ...(data.data ?? {}),
-      },
-      true
-    );
+      } as ResponseError;
+    }
+
+    return this.send(this._error, true);
   }
 }

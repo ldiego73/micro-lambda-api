@@ -44,6 +44,9 @@ describe("Handler with AWS API Gateway HTTP API", () => {
     const result = response.status(HttpStatus.BAD_REQUEST).error(responseError);
 
     expect(result.body).toBe(JSON.stringify(responseError));
+    expect(responseError.status).toBe(response.toResponseError().status);
+    expect(responseError.code).toBe(response.toResponseError().code);
+    expect(responseError.message).toBe(response.toResponseError().message);
     expect(result.statusCode).toBe(HttpStatus.BAD_REQUEST);
     expect(result.isBase64Encoded).toBeFalsy();
     expect(result.statusDescription).toBeUndefined();

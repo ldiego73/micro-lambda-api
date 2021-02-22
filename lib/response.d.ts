@@ -26,7 +26,8 @@ export declare class ApiResponse {
     headers: {
         [key: string]: string | undefined;
     };
-    private response;
+    private _response;
+    private _error;
     constructor(request?: ApiRequest | undefined);
     status(code: HttpStatus): ApiResponse;
     header(key: string, value: string): ApiResponse;
@@ -34,6 +35,7 @@ export declare class ApiResponse {
     private getDefaultCors;
     cors(options?: CorsOptions): ApiResponse;
     toResponse(): Response;
+    toResponseError(): ResponseError;
     send(payload?: unknown, isError?: boolean): Response;
     json(body: any): Response;
     html(body: string): Response;
