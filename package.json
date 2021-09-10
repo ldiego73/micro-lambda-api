@@ -1,6 +1,6 @@
 {
   "name": "micro-lambda-api",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Micro framework for your lambda applications",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

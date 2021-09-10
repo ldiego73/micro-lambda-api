@@ -43,12 +43,18 @@ export class ApiRouter {
   private _routes: Route[] = [];
   private _middlewares: HandlerFunction[] = [];
 
-  constructor(private options?: RouterOptions) {}
+  constructor(private _options?: RouterOptions) {}
 
   use(handler: HandlerFunction): ApiRouter {
     if (typeof handler !== "function") throw new MiddlewareError();
 
     this._middlewares.push(handler);
+
+    return this;
+  }
+
+  options(path: string, handler: HandlerFunction): ApiRouter {
+    this.addRoute(path, HttpMethod.OPTIONS, handler);
 
     return this;
   }
@@ -93,8 +99,8 @@ export class ApiRouter {
   private createRoute(path: string): string {
     let newPath = path;
 
-    if (this.options?.version) newPath = `${this.options.version}${newPath}`;
-    if (this.options?.basePath) newPath = `${this.options.basePath}${newPath}`;
+    if (this._options?.version) newPath = `${this._options.version}${newPath}`;
+    if (this._options?.basePath) newPath = `${this._options.basePath}${newPath}`;
 
     return normalizePath(newPath);
   }
