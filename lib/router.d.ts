@@ -10,11 +10,12 @@ export interface RouteParams {
 export declare function getRouteParams(route: string, path: string): RouteParams | undefined;
 export declare const instanceOfRoute: (middleware: any) => middleware is Route;
 export declare class ApiRouter {
-    private options?;
+    private _options?;
     private _routes;
     private _middlewares;
-    constructor(options?: RouterOptions | undefined);
+    constructor(_options?: RouterOptions | undefined);
     use(handler: HandlerFunction): ApiRouter;
+    options(path: string, handler: HandlerFunction): ApiRouter;
     get(path: string, handler: HandlerFunction): ApiRouter;
     post(path: string, handler: HandlerFunction): ApiRouter;
     put(path: string, handler: HandlerFunction): ApiRouter;
